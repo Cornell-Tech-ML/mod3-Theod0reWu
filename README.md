@@ -396,4 +396,6 @@ loop is executed and reused inside the loop):
 ```
 
 ## Task 3.5
+![image](https://github.com/user-attachments/assets/286f4cec-b6d3-4933-866b-bb18bf9f87b6)
+
 ![image](https://github.com/user-attachments/assets/467cf62e-14ab-4149-8aac-a1e79dff2e8b)
