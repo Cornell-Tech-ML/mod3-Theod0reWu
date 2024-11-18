@@ -31,7 +31,7 @@ The files that will be synced are:
 
         minitorch/tensor_data.py minitorch/tensor_functions.py minitorch/tensor_ops.py minitorch/operators.py minitorch/scalar.py minitorch/scalar_functions.py minitorch/module.py minitorch/autodiff.py minitorch/module.py project/run_manual.py project/run_scalar.py project/run_tensor.py minitorch/operators.py minitorch/module.py minitorch/autodiff.py minitorch/tensor.py minitorch/datasets.py minitorch/testing.py minitorch/optim.py
 
-
+## Task 3.1
 The output from parallel_check.py for MAP, ZIP and REDUCE:
 ```
 MAP
@@ -262,6 +262,8 @@ loop is executed and reused inside the loop):
    Allocation:: out_index = np.empty(MAX_DIMS, np.int32)
     - numpy.empty() is used for the allocation.
 ```
+
+## Task 3.2
 The output for matrix multiply:
 ```
 MATRIX MULTIPLY
@@ -392,3 +394,6 @@ loop is executed and reused inside the loop):
    Allocation:: b_index = np.empty(MAX_DIMS, np.int32)
     - numpy.empty() is used for the allocation.
 ```
+
+## Task 3.5
+![image](https://github.com/user-attachments/assets/467cf62e-14ab-4149-8aac-a1e79dff2e8b)
