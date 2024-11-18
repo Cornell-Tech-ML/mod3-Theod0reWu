@@ -50,6 +50,31 @@ def test_create(backend: str, t1: List[float]) -> None:
     for i in range(len(t1)):
         assert t1[i] == t2[i]
 
+@given(data())
+@settings(max_examples=100)
+@pytest.mark.parametrize("backend", backend_tests)
+@pytest.mark.inv
+def test_inv(backend: str, data: DataObject,) -> None:
+    """Run forward for all one arg functions above."""
+    t1 = data.draw(tensors(backend=shared[backend]))
+    print(t1)
+    t2 = -t1
+    for ind in t2._tensor.indices():
+        print("idx:", ind, "mine|correct:", t2[ind], "|" , -t1[ind], "input:", t1[ind])
+        assert_close(t2[ind], -t1[ind], t1[ind])
+
+@given(data())
+@settings(max_examples=100)
+@pytest.mark.parametrize("backend", backend_tests)
+@pytest.mark.add_const
+def test_add_constant(backend: str, data: DataObject,) -> None:
+    """Run forward for all one arg functions above."""
+    t1 = data.draw(tensors(backend=shared[backend]))
+    print(t1)
+    t2 = t1 + 5
+    for ind in t2._tensor.indices():
+        print("idx:", ind, "mine|correct:", t2[ind], "|" , t1[ind] + 5, "input:", t1[ind])
+        assert_close(t2[ind], t1[ind] + 5, t1[ind])
 
 @given(data())
 @settings(max_examples=100)
@@ -65,7 +90,8 @@ def test_one_args(
     name, base_fn, tensor_fn = fn
     t2 = tensor_fn(t1)
     for ind in t2._tensor.indices():
-        assert_close(t2[ind], base_fn(t1[ind]))
+        # print(t1[ind], t2[ind], base_fn(t1[ind]))
+        assert_close(t2[ind], base_fn(t1[ind]), t1[ind])
 
 
 @given(data())
@@ -306,7 +332,7 @@ if numba.cuda.is_available():
 
 
 @given(data())
-@settings(max_examples=25)
+@settings(max_examples=26)
 @pytest.mark.parametrize("fn", two_arg)
 @pytest.mark.parametrize("backend", backend_tests)
 def test_two_grad_broadcast(
