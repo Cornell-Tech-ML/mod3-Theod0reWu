@@ -21,7 +21,7 @@ one_arg, two_arg, red_arg = MathTestVariable._comp_testing()
 
 SimpleBackend = minitorch.TensorBackend(minitorch.SimpleOps)
 FastTensorBackend = minitorch.TensorBackend(minitorch.FastOps)
-shared: Dict[str, TensorBackend] = {"fast": FastTensorBackend}
+shared: Dict[str, TensorBackend] = {"fast": FastTensorBackend, "simple": SimpleBackend}
 
 # ## Task 3.1
 backend_tests = [pytest.param("fast", marks=pytest.mark.task3_1)]
@@ -38,6 +38,11 @@ if numba.cuda.is_available():
     matmul_tests.append(pytest.param("cuda", marks=pytest.mark.task3_4))
     shared["cuda"] = minitorch.TensorBackend(minitorch.CudaOps)
 
+include_simple = False
+if include_simple:
+    # Include SimpleBackend in tests
+    backend_tests.append(pytest.param("simple", marks=pytest.mark.task3_1))
+    matmul_tests.append(pytest.param("simple", marks=pytest.mark.task3_2))
 
 # ## Task 3.1 and 3.3
 
@@ -57,10 +62,10 @@ def test_create(backend: str, t1: List[float]) -> None:
 def test_inv(backend: str, data: DataObject,) -> None:
     """Run forward for all one arg functions above."""
     t1 = data.draw(tensors(backend=shared[backend]))
-    print(t1)
+    # print(t1)
     t2 = -t1
     for ind in t2._tensor.indices():
-        print("idx:", ind, "mine|correct:", t2[ind], "|" , -t1[ind], "input:", t1[ind])
+        # print("idx:", ind, "mine|correct:", t2[ind], "|" , -t1[ind], "input:", t1[ind])
         assert_close(t2[ind], -t1[ind], t1[ind])
 
 @given(data())
@@ -70,10 +75,10 @@ def test_inv(backend: str, data: DataObject,) -> None:
 def test_add_constant(backend: str, data: DataObject,) -> None:
     """Run forward for all one arg functions above."""
     t1 = data.draw(tensors(backend=shared[backend]))
-    print(t1)
+    # print(t1)
     t2 = t1 + 5
     for ind in t2._tensor.indices():
-        print("idx:", ind, "mine|correct:", t2[ind], "|" , t1[ind] + 5, "input:", t1[ind])
+        # print("idx:", ind, "mine|correct:", t2[ind], "|" , t1[ind] + 5, "input:", t1[ind])
         assert_close(t2[ind], t1[ind] + 5, t1[ind])
 
 @given(data())

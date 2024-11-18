@@ -357,9 +357,24 @@ def _tensor_matrix_multiply(
     a_batch_stride = a_strides[0] if a_shape[0] > 1 else 0
     b_batch_stride = b_strides[0] if b_shape[0] > 1 else 0
 
-    # TODO: Implement for Task 3.2.
-    raise NotImplementedError("Need to implement for Task 3.2")
-    
+    for flat_out_idx in range(len(out)):
+        out_index = np.empty(MAX_DIMS, np.int32)
+        a_index = np.empty(MAX_DIMS, np.int32)
+        b_index = np.empty(MAX_DIMS, np.int32)
+
+        to_index(flat_out_idx, out_shape, out_index)
+        row, col = out_index[len(a_shape) - 2], out_index[len(a_shape) - 1]
+        out_index[len(a_shape) - 2:] = 0
+        broadcast_index(out_index, out_shape, a_shape, a_index)
+        broadcast_index(out_index, out_shape, b_shape, b_index)
+
+        temp = 0
+        for i in range(a_shape[-1]):
+            a_flat_idx = a_batch_stride * a_index[0] + a_strides[-2] * row + a_strides[-1] * i
+            b_flat_idx = b_batch_stride * b_index[0] + b_strides[-2] * i + b_strides[-1] * col
+            temp += a_storage[a_flat_idx] * b_storage[b_flat_idx]
+        out[flat_out_idx] = temp
+
 
 tensor_matrix_multiply = njit(_tensor_matrix_multiply, parallel=True)
 assert tensor_matrix_multiply is not None

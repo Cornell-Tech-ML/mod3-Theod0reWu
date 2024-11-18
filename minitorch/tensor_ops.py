@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Callable, Optional, Type
 
+from numba.parfors.parfor import assert_equiv
 import numpy as np
 from typing_extensions import Protocol
 
@@ -49,7 +50,7 @@ class TensorOps:
     @staticmethod
     def matrix_multiply(a: Tensor, b: Tensor) -> Tensor:
         """Matrix multiply"""
-        raise NotImplementedError("Not implemented in this assignment")
+        ...
 
     cuda = False
 
@@ -231,12 +232,53 @@ class SimpleOps(TensorOps):
     @staticmethod
     def matrix_multiply(a: "Tensor", b: "Tensor") -> "Tensor":
         """Matrix multiplication"""
-        raise NotImplementedError("Not implemented in this assignment")
+        assert a.shape[-1] == b.shape[-2]
+        front = []
+        if a.shape[:-2] != b.shape[:-2]:
+            front = list(shape_broadcast(a.shape[:-2], b.shape[:-2]))
+        c_shape = tuple(front + [a.shape[-2], b.shape[-1]])
+        out = a.zeros(c_shape)
+        matrix_multiply(*out.tuple(), *a.tuple(), *b.tuple())
+        return out
 
     is_cuda = False
 
 
 # Implementations.
+
+def matrix_multiply(
+        out: Storage,
+        out_shape: Shape,
+        out_strides: Strides,
+        a_storage: Storage,
+        a_shape: Shape,
+        a_strides: Strides,
+        b_storage: Storage,
+        b_shape: Shape,
+        b_strides: Strides) -> None:
+    """Does the matrix multiply between a and b"""
+    a_batch_stride = a_strides[0] if a_shape[0] > 1 else 0
+    b_batch_stride = b_strides[0] if b_shape[0] > 1 else 0
+    
+    for flat_out_idx in range(len(out)):
+        out_index = np.empty(MAX_DIMS, np.int32)
+        a_index = np.empty(MAX_DIMS, np.int32)
+        b_index = np.empty(MAX_DIMS, np.int32)
+
+        to_index(flat_out_idx, out_shape, out_index)
+        out_index[len(a_shape) - 2:] = 0
+        broadcast_index(out_index, out_shape, a_shape, a_index)
+        broadcast_index(out_index, out_shape, b_shape, b_index)
+
+        to_index(flat_out_idx, out_shape, out_index)
+        temp = 0
+        for i in range(a_shape[-1]):
+            a_flat_idx = a_batch_stride * a_index[0] + a_strides[-2] * out_index[-2] + a_strides[-1] * i
+            b_flat_idx = b_batch_stride * b_index[0] + b_strides[-2] * i + b_strides[-1] * out_index[-1]
+            temp += a_storage[a_flat_idx] * b_storage[b_flat_idx]
+        out[flat_out_idx] = temp
+
+       
 
 
 def tensor_map(
