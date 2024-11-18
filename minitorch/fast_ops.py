@@ -357,7 +357,7 @@ def _tensor_matrix_multiply(
     a_batch_stride = a_strides[0] if a_shape[0] > 1 else 0
     b_batch_stride = b_strides[0] if b_shape[0] > 1 else 0
 
-    for flat_out_idx in range(len(out)):
+    for flat_out_idx in prange(len(out)):
         out_index = np.empty(MAX_DIMS, np.int32)
         a_index = np.empty(MAX_DIMS, np.int32)
         b_index = np.empty(MAX_DIMS, np.int32)
@@ -369,7 +369,7 @@ def _tensor_matrix_multiply(
         broadcast_index(out_index, out_shape, b_shape, b_index)
 
         temp = 0
-        for i in range(a_shape[-1]):
+        for i in prange(a_shape[-1]):
             a_flat_idx = a_batch_stride * a_index[0] + a_strides[-2] * row + a_strides[-1] * i
             b_flat_idx = b_batch_stride * b_index[0] + b_strides[-2] * i + b_strides[-1] * col
             temp += a_storage[a_flat_idx] * b_storage[b_flat_idx]
