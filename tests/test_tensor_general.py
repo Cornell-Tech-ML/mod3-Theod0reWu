@@ -162,7 +162,19 @@ def test_reduce(
 
 if numba.cuda.is_available():
 
+    @pytest.mark.sum_practice_mine
+    def test_sum_practice_mine() -> None:
+        x = [i for i in range(16)]
+        b = minitorch.tensor(x)
+        s = b.sum()[0]
+        print(b, s)
+        b2 = minitorch.tensor(x, backend=shared["cuda"])
+        out = minitorch.sum_practice(b2)
+        print(out)
+        assert_close(s, out._storage[0])
+
     @pytest.mark.task3_3
+    @pytest.mark.sum_practice
     def test_sum_practice() -> None:
         x = [random.random() for i in range(16)]
         b = minitorch.tensor(x)
@@ -172,6 +184,7 @@ if numba.cuda.is_available():
         assert_close(s, out._storage[0])
 
     @pytest.mark.task3_3
+    @pytest.mark.sum_practice
     def test_sum_practice2() -> None:
         x = [random.random() for i in range(64)]
         b = minitorch.tensor(x)
@@ -181,6 +194,7 @@ if numba.cuda.is_available():
         assert_close(s, out._storage[0] + out._storage[1])
 
     @pytest.mark.task3_3
+    @pytest.mark.sum_practice
     def test_sum_practice3() -> None:
         x = [random.random() for i in range(48)]
         b = minitorch.tensor(x)
@@ -189,7 +203,18 @@ if numba.cuda.is_available():
         out = minitorch.sum_practice(b2)
         assert_close(s, out._storage[0] + out._storage[1])
 
+    @pytest.mark.sum_mine
+    def test_sum_mine() -> None:
+        x = [i for i in range(32)]
+        b = minitorch.tensor(x)
+        s = b.sum()[0]
+        b2 = minitorch.tensor(x, backend=shared["cuda"])
+        out = b2.sum(0)
+        print(x, s, out[0])
+        assert_close(s, out[0])
+
     @pytest.mark.task3_3
+    @pytest.mark.sum
     def test_sum_practice4() -> None:
         x = [random.random() for i in range(32)]
         b = minitorch.tensor(x)
@@ -199,6 +224,7 @@ if numba.cuda.is_available():
         assert_close(s, out[0])
 
     @pytest.mark.task3_3
+    @pytest.mark.sum
     def test_sum_practice5() -> None:
         x = [random.random() for i in range(500)]
         b = minitorch.tensor(x)
@@ -208,6 +234,7 @@ if numba.cuda.is_available():
         assert_close(s, out[0])
 
     @pytest.mark.task3_3
+    @pytest.mark.sum
     def test_sum_practice_other_dims() -> None:
         x = [[random.random() for i in range(32)] for j in range(16)]
         b = minitorch.tensor(x)

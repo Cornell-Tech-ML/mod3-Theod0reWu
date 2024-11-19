@@ -1,6 +1,7 @@
 # type: ignore
 # Currently pyright doesn't support numba.cuda
 
+from functools import reduce
 from typing import Callable, Optional, TypeVar, Any
 
 import numba
@@ -259,27 +260,20 @@ def _sum_practice(out: Storage, a: Storage, size: int) -> None:
     cache = cuda.shared.array(BLOCK_DIM, numba.float64)
     i = cuda.blockIdx.x * cuda.blockDim.x + cuda.threadIdx.x
     pos = cuda.threadIdx.x
-
     if i < size:
         cache[pos] = a[i]
     else:
         cache[pos] = 0
     cuda.syncthreads()
 
-    # if (pos == 0):
-    #     temp = 0
-    #     for e in range(BLOCK_DIM):
-    #         if (i + e < size):
-    #             temp += cache[e]
-    #         out[i // BLOCK_DIM] = temp
-    
     at = BLOCK_DIM // 2
-    while (at > 1):
-        for e in range(at):
-            cache[e] = cache[e + at]
+    while (at > 0):
+        if (pos < at):
+            cache[pos] += cache[pos + at]
         cuda.syncthreads()
         at //= 2
-
+    if (pos == 0):
+        out[cuda.blockIdx.x] = cache[0]
 
 jit_sum_practice = cuda.jit()(_sum_practice)
 
@@ -328,7 +322,23 @@ def tensor_reduce(
         out_pos = cuda.blockIdx.x
         pos = cuda.threadIdx.x
 
-        
+        to_index(out_pos, out_shape, out_index)
+        out_index[reduce_dim] = pos
+        a_flat_idx = index_to_position(out_index, a_strides)
+        if pos < a_shape[reduce_dim]:
+            cache[pos] = a_storage[a_flat_idx]
+        else:
+            cache[pos] = reduce_value
+        cuda.syncthreads()
+
+        at = BLOCK_DIM // 2
+        while (at > 0):
+            if (pos < at):
+                cache[pos] = fn(cache[pos], cache[pos + at])
+            cuda.syncthreads()
+            at //= 2
+        if (pos == 0):
+            out[out_pos] = cache[0]
 
     return jit(_reduce)  # type: ignore
 
@@ -365,10 +375,28 @@ def _mm_practice(out: Storage, a: Storage, b: Storage, size: int) -> None:
 
     """
     BLOCK_DIM = 32
-    # TODO: Implement for Task 3.3.
-    raise NotImplementedError("Need to implement for Task 3.3")
+    a_shared = cuda.shared.array((BLOCK_DIM, BLOCK_DIM), numba.float64)
+    b_shared = cuda.shared.array((BLOCK_DIM, BLOCK_DIM), numba.float64)
 
+    # The final position c[i, j]
+    i = cuda.blockIdx.x * cuda.blockDim.x + cuda.threadIdx.x
+    j = cuda.blockIdx.y * cuda.blockDim.y + cuda.threadIdx.y
 
+    # The local position in the block.
+    pi = cuda.threadIdx.x
+    pj = cuda.threadIdx.y
+
+    if (i < size and j < size):
+        a_shared[pi * size + pj] = a[i * size + j]
+        b_shared[pi * size + pj] = b[i * size + j]
+    cuda.syncthreads()
+
+    if (i < size and j < size):
+        temp = 0
+        for k in range(size):
+            temp += a_shared[i * size + k] * b_shared[k * size + j]
+        out[i * size + j] = temp
+        
 jit_mm_practice = jit(_mm_practice)
 
 
