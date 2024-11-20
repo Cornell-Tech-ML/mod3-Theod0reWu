@@ -470,18 +470,11 @@ def _tensor_matrix_multiply(
     #    a) Copy into shared memory for a matrix.
     #    b) Copy into shared memory for b matrix
     #    c) Compute the dot produce for position c[i, j]
-    out_index = cuda.local.array(MAX_DIMS, numba.int32)
-    a_index = cuda.local.array(MAX_DIMS, numba.int32)
-    b_index = cuda.local.array(MAX_DIMS, numba.int32)
 
     # get the correct index of the batch dimensions in a and b
-    out_index[0] = batch
-    out_index[len(out_shape) - 2] = i
-    out_index[len(out_shape) - 1] = j
     out_flat_idx = out_strides[0] * batch + out_strides[-2] * i + out_strides[-1] * j
-    out_index[len(out_shape) - 2 :] = 0
-    broadcast_index(out_index, out_shape, a_shape, a_index)
-    broadcast_index(out_index, out_shape, b_shape, b_index)
+    a_batch = min(a_shape[0] - 1, batch)
+    b_batch = min(b_shape[0] - 1, batch)
 
     # accumulate the answer in each thread for c[i,j] in temp_out
     temp_out = 0
@@ -489,12 +482,8 @@ def _tensor_matrix_multiply(
         # Get the ordinal indicies for the a and b tensor
         a_j = section * BLOCK_DIM + pj
         b_i = section * BLOCK_DIM + pi
-        a_flat_idx = (
-            a_batch_stride * a_index[0] + a_strides[-2] * i + a_strides[-1] * a_j
-        )
-        b_flat_idx = (
-            b_batch_stride * b_index[0] + b_strides[-2] * b_i + b_strides[-1] * j
-        )
+        a_flat_idx = a_batch_stride * a_batch + a_strides[-2] * i + a_strides[-1] * a_j
+        b_flat_idx = b_batch_stride * b_batch + b_strides[-2] * b_i + b_strides[-1] * j
 
         # Load the necessary data in from the a and b tensors
         if i < a_shape[-2] and a_j < a_shape[-1]:
