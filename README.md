@@ -502,7 +502,8 @@ Epoch  230  loss  1.9598601132723696 correct 45
 Epoch  240  loss  1.5917043155001505 correct 46
 command took 0:12:18.01 (738.01s total)
 ```
+### BIG model
 
-### Graph
+### Graph for matrix multiply
 ![image](https://github.com/user-attachments/assets/170e205d-9ee1-4b77-ac09-068231fcb66f)
 
