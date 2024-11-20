@@ -396,6 +396,14 @@ loop is executed and reused inside the loop):
 ```
 
 ## Task 3.5
-![image](https://github.com/user-attachments/assets/286f4cec-b6d3-4933-866b-bb18bf9f87b6)
+### CPU:
+Simple Dataset: <br>
+![image](https://github.com/user-attachments/assets/286f4cec-b6d3-4933-866b-bb18bf9f87b6) <br>
+Xor Dataset: <br>
+![image](https://github.com/user-attachments/assets/b88daf22-6151-460c-b388-517ffa97a8ba) <br>
+Split Dataset: <br>
+![image](https://github.com/user-attachments/assets/467cf62e-14ab-4149-8aac-a1e79dff2e8b) <br>
 
-![image](https://github.com/user-attachments/assets/467cf62e-14ab-4149-8aac-a1e79dff2e8b)
+### Graph
+![image](https://github.com/user-attachments/assets/170e205d-9ee1-4b77-ac09-068231fcb66f)
+
