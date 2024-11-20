@@ -221,7 +221,10 @@ class LT(Function):
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, Tensor]:
         """Less Than backward"""
-        (t1_shape, t2_shape,) = ctx.saved_values
+        (
+            t1_shape,
+            t2_shape,
+        ) = ctx.saved_values
         return zeros(t1_shape), zeros(t2_shape)
         # return (grad_output.zeros(), grad_output.zeros())
 
@@ -236,7 +239,10 @@ class EQ(Function):
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, Tensor]:
         """Equal backward"""
-        (t1_shape, t2_shape,) = ctx.saved_values
+        (
+            t1_shape,
+            t2_shape,
+        ) = ctx.saved_values
         return zeros(t1_shape), zeros(t2_shape)
         # return (grad_output.zeros(), grad_output.zeros())
 
@@ -246,6 +252,7 @@ class IsClose(Function):
     def forward(ctx: Context, t1: Tensor, t2: Tensor) -> Tensor:
         """IsClose forward"""
         return t1.f.is_close_zip(t1, t2)
+
 
 class Permute(Function):
     @staticmethod
@@ -268,8 +275,14 @@ class Permute(Function):
         #     tensor([0 for i in range(length)]),
         # )
         order = ctx.saved_values[0]
-        order2 = [a[0] for a in sorted(enumerate([order[i] for i in range(order.size)]), key = lambda a: a[1])]
+        order2 = [
+            a[0]
+            for a in sorted(
+                enumerate([order[i] for i in range(order.size)]), key=lambda a: a[1]
+            )
+        ]
         return grad_output._new(grad_output._tensor.permute(*order2)), 0.0
+
 
 class View(Function):
     @staticmethod

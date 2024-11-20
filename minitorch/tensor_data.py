@@ -112,6 +112,7 @@ def broadcast_index(
         else:
             out_index[i] = 0
 
+
 def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
     """Broadcast two shapes to create a new union shape.
 
@@ -168,14 +169,11 @@ def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
         else:
             c_rev[i] = max(a_rev[i], b_rev[i])
             if a_rev[i] != c_rev[i] and a_rev[i] != 1:
-                raise IndexingError(
-                    f"Broadcasting dimensions mismatch: {a} vs {b}"
-                )
+                raise IndexingError(f"Broadcasting dimensions mismatch: {a} vs {b}")
             if b_rev[i] != c_rev[i] and b_rev[i] != 1:
-                raise IndexingError(
-                    f"Broadcasting dimensions mismatch: {a} vs {b}"
-                )
+                raise IndexingError(f"Broadcasting dimensions mismatch: {a} vs {b}")
     return tuple(reversed(c_rev))
+
 
 def strides_from_shape(shape: UserShape) -> UserStrides:
     """Return a contiguous stride for a shape"""

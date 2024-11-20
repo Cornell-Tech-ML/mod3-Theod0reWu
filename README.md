@@ -35,7 +35,7 @@ The files that will be synced are:
 The output from parallel_check.py for MAP, ZIP and REDUCE:
 ```
 MAP
- 
+
 ================================================================================
  Parallel Accelerator Optimizing:  Function tensor_map.<locals>._map, C:\Users\w
 ut6\CT_Courses\classes\MLE\modules\module3\mod3-Theod0reWu\minitorch\fast_ops.py
@@ -94,7 +94,7 @@ loop is executed and reused inside the loop):
     - numpy.empty() is used for the allocation.
 None
 ZIP
- 
+
 ================================================================================
  Parallel Accelerator Optimizing:  Function tensor_zip.<locals>._zip, C:\Users\w
 ut6\CT_Courses\classes\MLE\modules\module3\mod3-Theod0reWu\minitorch\fast_ops.py
@@ -214,7 +214,7 @@ loop is executed and reused inside the loop):
     - numpy.empty() is used for the allocation.
 None
 REDUCE
- 
+
 ================================================================================
  Parallel Accelerator Optimizing:  Function tensor_reduce.<locals>._reduce, C:\U
 sers\wut6\CT_Courses\classes\MLE\modules\module3\mod3-
@@ -267,7 +267,7 @@ loop is executed and reused inside the loop):
 The output for matrix multiply:
 ```
 MATRIX MULTIPLY
- 
+
 ================================================================================
  Parallel Accelerator Optimizing:  Function _tensor_matrix_multiply, C:\Users\wu
 t6\CT_Courses\classes\MLE\modules\module3\mod3-Theod0reWu\minitorch\fast_ops.py

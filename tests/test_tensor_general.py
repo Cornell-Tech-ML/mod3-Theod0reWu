@@ -55,11 +55,15 @@ def test_create(backend: str, t1: List[float]) -> None:
     for i in range(len(t1)):
         assert t1[i] == t2[i]
 
+
 @given(data())
 @settings(max_examples=100)
 @pytest.mark.parametrize("backend", backend_tests)
 @pytest.mark.inv
-def test_inv(backend: str, data: DataObject,) -> None:
+def test_inv(
+    backend: str,
+    data: DataObject,
+) -> None:
     """Run forward for all one arg functions above."""
     t1 = data.draw(tensors(backend=shared[backend]))
     # print(t1)
@@ -68,11 +72,15 @@ def test_inv(backend: str, data: DataObject,) -> None:
         # print("idx:", ind, "mine|correct:", t2[ind], "|" , -t1[ind], "input:", t1[ind])
         assert_close(t2[ind], -t1[ind], t1[ind])
 
+
 @given(data())
 @settings(max_examples=100)
 @pytest.mark.parametrize("backend", backend_tests)
 @pytest.mark.add_const
-def test_add_constant(backend: str, data: DataObject,) -> None:
+def test_add_constant(
+    backend: str,
+    data: DataObject,
+) -> None:
     """Run forward for all one arg functions above."""
     t1 = data.draw(tensors(backend=shared[backend]))
     # print(t1)
@@ -80,6 +88,7 @@ def test_add_constant(backend: str, data: DataObject,) -> None:
     for ind in t2._tensor.indices():
         # print("idx:", ind, "mine|correct:", t2[ind], "|" , t1[ind] + 5, "input:", t1[ind])
         assert_close(t2[ind], t1[ind] + 5, t1[ind])
+
 
 @given(data())
 @settings(max_examples=100)

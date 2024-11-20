@@ -300,8 +300,8 @@ class Tensor:
         number of dimensions of the tensor
         """
         return self._tensor.dims
-    
-    @ property
+
+    @property
     def size(self) -> int:
         """Returns
         total number of elements in the tensor
@@ -349,14 +349,14 @@ class Tensor:
         if dim is None:
             return All.apply(
                 # self, Tensor.make([Tensor.NoneDim], (1,), backend=self.backend)
-                self.view(self.size), self._ensure_tensor(0)
+                self.view(self.size),
+                self._ensure_tensor(0),
             )
         return All.apply(self, self._ensure_tensor(dim))
 
     def is_close(self, y: Tensor) -> Tensor:
         """Return a new tensor with 1 if all elements are close to the corresponding elements in `b`."""
         return IsClose.apply(self, y)
-
 
     def sigmoid(self) -> Tensor:
         """Return a new tensor with the sigmoid of the input tensor."""
