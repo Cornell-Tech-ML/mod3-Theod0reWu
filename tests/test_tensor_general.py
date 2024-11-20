@@ -274,6 +274,24 @@ if numba.cuda.is_available():
             for j in range(32):
                 assert_close(z[i, j], z2._storage[32 * i + j])
 
+    @pytest.mark.mul_mine
+    def test_mul_mine() -> None:
+        x1 = [[i for i in range(2)] for j in range(2)]
+        y1 = [[i for i in range(2)] for j in range(2)]
+        z = minitorch.tensor(x1, backend=shared["fast"]) @ minitorch.tensor(
+            y1, backend=shared["fast"]
+        )
+        print("Correct:", z)
+
+        x = minitorch.tensor(x1, backend=shared["cuda"])
+        y = minitorch.tensor(y1, backend=shared["cuda"])
+        z2 = x @ y
+
+        print("Mine:", z2)
+        for i in range(2):
+            for j in range(2):
+                assert_close(z[i, j], z2[i, j])
+
     @pytest.mark.task3_4
     def test_mul_practice3() -> None:
         """Small real example"""
@@ -291,9 +309,28 @@ if numba.cuda.is_available():
             for j in range(2):
                 assert_close(z[i, j], z2[i, j])
 
+    def test_mul_practice_mine() -> None:
+        """Extend to require 2 blocks"""
+        numba.cuda.profiling()
+        size = 33
+        x1 = [[i for i in range(size)] for j in range(size)]
+        y1 = [[i for i in range(size)] for j in range(size)]
+        z = minitorch.tensor(x1, backend=shared["fast"]) @ minitorch.tensor(
+            y1, backend=shared["fast"]
+        )
+
+        x = minitorch.tensor(x1, backend=shared["cuda"])
+        y = minitorch.tensor(y1, backend=shared["cuda"])
+        z2 = x @ y
+
+        for i in range(size):
+            for j in range(size):
+                assert_close(z[i, j], z2[i, j])
+
     @pytest.mark.task3_4
     def test_mul_practice4() -> None:
         """Extend to require 2 blocks"""
+        numba.cuda.profiling()
         size = 33
         x1 = [[random.random() for i in range(size)] for j in range(size)]
         y1 = [[random.random() for i in range(size)] for j in range(size)]
