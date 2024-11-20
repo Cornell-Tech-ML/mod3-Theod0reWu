@@ -30,6 +30,7 @@ Fn = TypeVar("Fn")
 
 
 def njit(fn: Fn, **kwargs: Any) -> Fn:
+    """Function to convert to jit"""
     return _njit(inline="always", **kwargs)(fn)  # type: ignore
 
 
