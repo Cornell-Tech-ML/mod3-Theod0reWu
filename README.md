@@ -473,34 +473,34 @@ command took 0:12:40.90 (760.90s total)
 ```
 Xor Dataset: <br>
 python project\run_fast_tensor.py --BACKEND gpu --HIDDEN 100 --DATASET xor --RATE 0.03 <br>
-Seconds per epoch: 2.95204
+Seconds per epoch: 2.94324
 ```
-Epoch  0  loss  6.672543103171848 correct 37
-Epoch  10  loss  4.114120807097733 correct 34
-Epoch  20  loss  5.224725963458059 correct 38
-Epoch  30  loss  3.8929358200152295 correct 42
-Epoch  40  loss  5.8829773172654285 correct 41
-Epoch  50  loss  4.3350751115082975 correct 42
-Epoch  60  loss  3.457718537500069 correct 41
-Epoch  70  loss  3.235999824937285 correct 39
-Epoch  80  loss  6.538711735119895 correct 45
-Epoch  90  loss  2.666461665569597 correct 46
-Epoch  100  loss  4.340809132494291 correct 42
-Epoch  110  loss  3.653752478400166 correct 47
-Epoch  120  loss  1.6450747141238498 correct 45
-Epoch  130  loss  1.818210109380465 correct 48
-Epoch  140  loss  5.0833867433092035 correct 41
-Epoch  150  loss  2.558618858761268 correct 44
-Epoch  160  loss  1.8222410483168858 correct 49
-Epoch  170  loss  3.0588401278147463 correct 47
-Epoch  180  loss  2.3898187546183483 correct 48
-Epoch  190  loss  1.7667747432540923 correct 46
-Epoch  200  loss  2.52062841044329 correct 42
-Epoch  210  loss  1.674854239387522 correct 45
-Epoch  220  loss  3.7304962689182672 correct 47
-Epoch  230  loss  1.9598601132723696 correct 45
-Epoch  240  loss  1.5917043155001505 correct 46
-command took 0:12:18.01 (738.01s total)
+Epoch  0  loss  8.114063354672046 correct 29
+Epoch  10  loss  6.439010824754746 correct 38
+Epoch  20  loss  5.321739570856142 correct 45
+Epoch  30  loss  4.16433694777748 correct 44
+Epoch  40  loss  4.1078520331573 correct 46
+Epoch  50  loss  4.889048000718426 correct 46
+Epoch  60  loss  3.957954516086025 correct 46
+Epoch  70  loss  3.108528832040963 correct 46
+Epoch  80  loss  2.6926637937419424 correct 46
+Epoch  90  loss  2.5856087125494494 correct 46
+Epoch  100  loss  1.9045744567420024 correct 46
+Epoch  110  loss  2.9518348306919506 correct 46
+Epoch  120  loss  2.6163485144205114 correct 46
+Epoch  130  loss  3.165150183305543 correct 48
+Epoch  140  loss  2.9203537206053487 correct 49
+Epoch  150  loss  2.149989975535762 correct 50
+Epoch  160  loss  1.9118278541175866 correct 48
+Epoch  170  loss  1.563886893561967 correct 49
+Epoch  180  loss  2.1519027327839284 correct 47
+Epoch  190  loss  2.411889368539014 correct 50
+Epoch  200  loss  1.741711861227805 correct 46
+Epoch  210  loss  1.749379272135755 correct 50
+Epoch  220  loss  1.6627095626366462 correct 50
+Epoch  230  loss  0.7361953318599451 correct 47
+Epoch  240  loss  1.3558784760866087 correct 50
+command took 0:12:15.81 (735.81s total)
 ```
 ### BIG model
 
