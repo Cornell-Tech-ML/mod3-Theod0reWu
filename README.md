@@ -271,128 +271,132 @@ MATRIX MULTIPLY
 ================================================================================
  Parallel Accelerator Optimizing:  Function _tensor_matrix_multiply, C:\Users\wu
 t6\CT_Courses\classes\MLE\modules\module3\mod3-Theod0reWu\minitorch\fast_ops.py
-(314)
+(324)
 ================================================================================
 
 
-Parallel loop listing for  Function _tensor_matrix_multiply, C:\Users\wut6\CT_Courses\classes\MLE\modules\module3\mod3-Theod0reWu\minitorch\fast_ops.py (314)
---------------------------------------------------------------------------------------------------|loop #ID
-def _tensor_matrix_multiply(                                                                      |
-    out: Storage,                                                                                 |
-    out_shape: Shape,                                                                             |
-    out_strides: Strides,                                                                         |
-    a_storage: Storage,                                                                           |
-    a_shape: Shape,                                                                               |
-    a_strides: Strides,                                                                           |
-    b_storage: Storage,                                                                           |
-    b_shape: Shape,                                                                               |
-    b_strides: Strides,                                                                           |
-) -> None:                                                                                        |
-    """NUMBA tensor matrix multiply function.                                                     |
-                                                                                                  |
-    Should work for any tensor shapes that broadcast as long as                                   |
-                                                                                                  |
-    ```                                                                                           |
-    assert a_shape[-1] == b_shape[-2]                                                             |
-    ```                                                                                           |
-                                                                                                  |
-    Optimizations:                                                                                |
-                                                                                                  |
-    * Outer loop in parallel                                                                      |
-    * No index buffers or function calls                                                          |
-    * Inner loop should have no global writes, 1 multiply.                                        |
-                                                                                                  |
-                                                                                                  |
-    Args:                                                                                         |
-    ----                                                                                          |
-        out (Storage): storage for `out` tensor                                                   |
-        out_shape (Shape): shape for `out` tensor                                                 |
-        out_strides (Strides): strides for `out` tensor                                           |
-        a_storage (Storage): storage for `a` tensor                                               |
-        a_shape (Shape): shape for `a` tensor                                                     |
-        a_strides (Strides): strides for `a` tensor                                               |
-        b_storage (Storage): storage for `b` tensor                                               |
-        b_shape (Shape): shape for `b` tensor                                                     |
-        b_strides (Strides): strides for `b` tensor                                               |
-                                                                                                  |
-    Returns:                                                                                      |
-    -------                                                                                       |
-        None : Fills in `out`                                                                     |
-                                                                                                  |
-    """                                                                                           |
-    a_batch_stride = a_strides[0] if a_shape[0] > 1 else 0                                        |
-    b_batch_stride = b_strides[0] if b_shape[0] > 1 else 0                                        |
-                                                                                                  |
-    for flat_out_idx in prange(len(out)):---------------------------------------------------------| #15
-        out_index = np.empty(MAX_DIMS, np.int32)                                                  |
-        a_index = np.empty(MAX_DIMS, np.int32)                                                    |
-        b_index = np.empty(MAX_DIMS, np.int32)                                                    |
-                                                                                                  |
-        to_index(flat_out_idx, out_shape, out_index)                                              |
-        row, col = out_index[len(a_shape) - 2], out_index[len(a_shape) - 1]                       |
-        out_index[len(a_shape) - 2:] = 0----------------------------------------------------------| #13
-        broadcast_index(out_index, out_shape, a_shape, a_index)                                   |
-        broadcast_index(out_index, out_shape, b_shape, b_index)                                   |
-                                                                                                  |
-        temp = 0                                                                                  |
-        for i in prange(a_shape[-1]):-------------------------------------------------------------| #14
-            a_flat_idx = a_batch_stride * a_index[0] + a_strides[-2] * row + a_strides[-1] * i    |
-            b_flat_idx = b_batch_stride * b_index[0] + b_strides[-2] * i + b_strides[-1] * col    |
-            temp += a_storage[a_flat_idx] * b_storage[b_flat_idx]                                 |
-        out[flat_out_idx] = temp                                                                  |
+Parallel loop listing for  Function _tensor_matrix_multiply, C:\Users\wut6\CT_Courses\classes\MLE\modules\module3\mod3-Theod0reWu\minitorch\fast_ops.py (324)
+-------------------------------------------------------------------------------------------|loop #ID
+def _tensor_matrix_multiply(                                                               |
+    out: Storage,                                                                          |
+    out_shape: Shape,                                                                      |
+    out_strides: Strides,                                                                  |
+    a_storage: Storage,                                                                    |
+    a_shape: Shape,                                                                        |
+    a_strides: Strides,                                                                    |
+    b_storage: Storage,                                                                    |
+    b_shape: Shape,                                                                        |
+    b_strides: Strides,                                                                    |
+) -> None:                                                                                 |
+    """NUMBA tensor matrix multiply function.                                              |
+                                                                                           |
+    Should work for any tensor shapes that broadcast as long as                            |
+                                                                                           |
+    ```                                                                                    |
+    assert a_shape[-1] == b_shape[-2]                                                      |
+    ```                                                                                    |
+                                                                                           |
+    Optimizations:                                                                         |
+                                                                                           |
+    * Outer loop in parallel                                                               |
+    * No index buffers or function calls                                                   |
+    * Inner loop should have no global writes, 1 multiply.                                 |
+                                                                                           |
+                                                                                           |
+    Args:                                                                                  |
+    ----                                                                                   |
+        out (Storage): storage for `out` tensor                                            |
+        out_shape (Shape): shape for `out` tensor                                          |
+        out_strides (Strides): strides for `out` tensor                                    |
+        a_storage (Storage): storage for `a` tensor                                        |
+        a_shape (Shape): shape for `a` tensor                                              |
+        a_strides (Strides): strides for `a` tensor                                        |
+        b_storage (Storage): storage for `b` tensor                                        |
+        b_shape (Shape): shape for `b` tensor                                              |
+        b_strides (Strides): strides for `b` tensor                                        |
+                                                                                           |
+    Returns:                                                                               |
+    -------                                                                                |
+        None : Fills in `out`                                                              |
+                                                                                           |
+    """                                                                                    |
+    a_batch_stride = a_strides[0] if a_shape[0] > 1 else 0                                 |
+    b_batch_stride = b_strides[0] if b_shape[0] > 1 else 0                                 |
+                                                                                           |
+    for flat_out_idx in prange(len(out)):--------------------------------------------------| #14
+        out_batch = (flat_out_idx // out_shape[-1]) // out_shape[-2] % out_shape[0]        |
+        row = (flat_out_idx // out_shape[-1]) % out_shape[-2]                              |
+        col = flat_out_idx % out_shape[-1]                                                 |
+                                                                                           |
+        a_batch = min(a_shape[0] - 1, out_batch)                                           |
+        b_batch = min(b_shape[0] - 1, out_batch)                                           |
+                                                                                           |
+        temp = 0                                                                           |
+        for i in prange(a_shape[-1]):------------------------------------------------------| #13
+            a_flat_idx = (                                                                 |
+                a_batch_stride * a_batch + a_strides[-2] * row + a_strides[-1] * i         |
+            )                                                                              |
+            b_flat_idx = (                                                                 |
+                b_batch_stride * b_batch + b_strides[-2] * i + b_strides[-1] * col         |
+            )                                                                              |
+            temp += a_storage[a_flat_idx] * b_storage[b_flat_idx]                          |
+        out[flat_out_idx] = temp                                                           |
+                                                                                           |
+    #### OLD version using buffers ########                                                |
+    # for flat_out_idx in prange(len(out)):                                                |
+    #     out_index = np.empty(MAX_DIMS, np.int32)                                         |
+    #     a_index = np.empty(MAX_DIMS, np.int32)                                           |
+    #     b_index = np.empty(MAX_DIMS, np.int32)                                           |
+                                                                                           |
+    #     to_index(flat_out_idx, out_shape, out_index)                                     |
+    #     row, col = out_index[len(a_shape) - 2], out_index[len(a_shape) - 1]              |
+    #     out_index[len(a_shape) - 2 :] = 0                                                |
+    #     broadcast_index(out_index, out_shape, a_shape, a_index)                          |
+    #     broadcast_index(out_index, out_shape, b_shape, b_index)                          |
+                                                                                           |
+    #     temp = 0                                                                         |
+    #     for i in prange(a_shape[-1]):                                                    |
+    #         a_flat_idx = (                                                               |
+    #             a_batch_stride * a_index[0] + a_strides[-2] * row + a_strides[-1] * i    |
+    #         )                                                                            |
+    #         b_flat_idx = (                                                               |
+    #             b_batch_stride * b_index[0] + b_strides[-2] * i + b_strides[-1] * col    |
+    #         )                                                                            |
+    #         temp += a_storage[a_flat_idx] * b_storage[b_flat_idx]                        |
+    #     out[flat_out_idx] = temp                                                         |
 --------------------------------- Fusing loops ---------------------------------
 Attempting fusion of parallel loops (combines loops with similar properties)...
-Following the attempted fusion of parallel for-loops there are 1 parallel for-
-loop(s) (originating from loops labelled: #15).
+Following the attempted fusion of parallel for-loops there are 2 parallel for-
+loop(s) (originating from loops labelled: #14, #13).
 --------------------------------------------------------------------------------
 ---------------------------- Optimising loop nests -----------------------------
 Attempting loop nest rewrites (optimising for the largest parallel loops)...
 
-+--15 is a parallel loop
++--14 is a parallel loop
    +--13 --> rewritten as a serial loop
-   +--14 --> rewritten as a serial loop
 --------------------------------------------------------------------------------
 ----------------------------- Before Optimisation ------------------------------
 Parallel region 0:
-+--15 (parallel)
++--14 (parallel)
    +--13 (parallel)
-   +--14 (parallel)
 
 
 --------------------------------------------------------------------------------
 ------------------------------ After Optimisation ------------------------------
 Parallel region 0:
-+--15 (parallel)
++--14 (parallel)
    +--13 (serial)
-   +--14 (serial)
 
 
 
-Parallel region 0 (loop #15) had 0 loop(s) fused and 2 loop(s) serialized as
-part of the larger parallel loop (#15).
+Parallel region 0 (loop #14) had 0 loop(s) fused and 1 loop(s) serialized as
+part of the larger parallel loop (#14).
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
 ---------------------------Loop invariant code motion---------------------------
 Allocation hoisting:
-The memory allocation derived from the instruction at C:\Users\wut6\CT_Courses\c
-lasses\MLE\modules\module3\mod3-Theod0reWu\minitorch\fast_ops.py (361) is
-hoisted out of the parallel loop labelled #15 (it will be performed before the
-loop is executed and reused inside the loop):
-   Allocation:: out_index = np.empty(MAX_DIMS, np.int32)
-    - numpy.empty() is used for the allocation.
-The memory allocation derived from the instruction at C:\Users\wut6\CT_Courses\c
-lasses\MLE\modules\module3\mod3-Theod0reWu\minitorch\fast_ops.py (362) is
-hoisted out of the parallel loop labelled #15 (it will be performed before the
-loop is executed and reused inside the loop):
-   Allocation:: a_index = np.empty(MAX_DIMS, np.int32)
-    - numpy.empty() is used for the allocation.
-The memory allocation derived from the instruction at C:\Users\wut6\CT_Courses\c
-lasses\MLE\modules\module3\mod3-Theod0reWu\minitorch\fast_ops.py (363) is
-hoisted out of the parallel loop labelled #15 (it will be performed before the
-loop is executed and reused inside the loop):
-   Allocation:: b_index = np.empty(MAX_DIMS, np.int32)
-    - numpy.empty() is used for the allocation.
+No allocation hoisting found
 ```
 
 ## Task 3.5
@@ -406,7 +410,7 @@ Split Dataset: <br>
 
 ### GPU:
 Simple Dataset: <br>
-python project\run_fast_tensor.py --BACKEND gpu --HIDDEN 100 --RATE 0.05
+python project\run_fast_tensor.py --BACKEND gpu --HIDDEN 100 --RATE 0.05 <br>
 Seconds per epoch: 2.74788
 ```
 Epoch  0  loss  6.968308463229703 correct 29
@@ -437,7 +441,7 @@ Epoch  240  loss  1.4884305587203188 correct 49
 command took 0:11:26.97 (686.97s total)
 ```
 Split Dataset: <br>
-project\run_fast_tensor.py --BACKEND gpu --HIDDEN 100 --DATASET split --RATE 0.05
+project\run_fast_tensor.py --BACKEND gpu --HIDDEN 100 --DATASET split --RATE 0.05 <br>
 Seconds per Epoch: 3.0436
 ```
 Epoch  0  loss  5.9280363848075375 correct 31
@@ -467,8 +471,6 @@ Epoch  230  loss  0.8190219831228698 correct 50
 Epoch  240  loss  0.6978672369666373 correct 49
 command took 0:12:40.90 (760.90s total)
 ```
-
-
 
 ### Graph
 ![image](https://github.com/user-attachments/assets/170e205d-9ee1-4b77-ac09-068231fcb66f)
