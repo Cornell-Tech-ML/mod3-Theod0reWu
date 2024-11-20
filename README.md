@@ -405,8 +405,40 @@ Split Dataset: <br>
 ![image](https://github.com/user-attachments/assets/467cf62e-14ab-4149-8aac-a1e79dff2e8b) <br>
 
 ### GPU:
+Simple Dataset: <br>
+python project\run_fast_tensor.py --BACKEND gpu --HIDDEN 100 --RATE 0.05
+Seconds per epoch: 2.74788
+```
+Epoch  0  loss  6.968308463229703 correct 29
+Epoch  10  loss  2.4280860188354807 correct 49
+Epoch  20  loss  1.2390654167987036 correct 47
+Epoch  30  loss  1.829166895158561 correct 49
+Epoch  40  loss  1.1209678512812382 correct 49
+Epoch  50  loss  1.7217099208406954 correct 50
+Epoch  60  loss  0.5330215200446707 correct 49
+Epoch  70  loss  1.3114988343179268 correct 49
+Epoch  80  loss  1.020579932183523 correct 49
+Epoch  90  loss  1.3445751263225478 correct 48
+Epoch  100  loss  0.7278752351171891 correct 49
+Epoch  110  loss  0.32153717455632996 correct 49
+Epoch  120  loss  0.17084081883090965 correct 50
+Epoch  130  loss  0.5336004339093579 correct 50
+Epoch  140  loss  0.08860233362612555 correct 49
+Epoch  150  loss  0.40352856696774664 correct 49
+Epoch  160  loss  0.014552892145467719 correct 49
+Epoch  170  loss  0.06963331794579398 correct 49
+Epoch  180  loss  0.44057545675851406 correct 49
+Epoch  190  loss  1.0338183481900238 correct 50
+Epoch  200  loss  0.28813281817926706 correct 49
+Epoch  210  loss  0.3858894668872543 correct 50
+Epoch  220  loss  0.23341562291681361 correct 50
+Epoch  230  loss  0.06911283649637871 correct 49
+Epoch  240  loss  1.4884305587203188 correct 49
+command took 0:11:26.97 (686.97s total)
+```
 Split Dataset: <br>
 project\run_fast_tensor.py --BACKEND gpu --HIDDEN 100 --DATASET split --RATE 0.05
+Seconds per Epoch: 3.0436
 ```
 Epoch  0  loss  5.9280363848075375 correct 31
 Epoch  10  loss  6.985445647831394 correct 40
@@ -435,7 +467,8 @@ Epoch  230  loss  0.8190219831228698 correct 50
 Epoch  240  loss  0.6978672369666373 correct 49
 command took 0:12:40.90 (760.90s total)
 ```
-Seconds per Epoch: 3.0436
+
+
 
 ### Graph
 ![image](https://github.com/user-attachments/assets/170e205d-9ee1-4b77-ac09-068231fcb66f)
