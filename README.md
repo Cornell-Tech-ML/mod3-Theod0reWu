@@ -408,7 +408,7 @@ Xor Dataset: <br>
 Split Dataset: <br>
 ![image](https://github.com/user-attachments/assets/467cf62e-14ab-4149-8aac-a1e79dff2e8b) <br>
 
-### GPU:
+### GPU (Run on my laptop):
 Simple Dataset: <br>
 python project\run_fast_tensor.py --BACKEND gpu --HIDDEN 100 --RATE 0.05 <br>
 Seconds per epoch: 2.74788
@@ -470,6 +470,37 @@ Epoch  220  loss  0.8293124943184889 correct 50
 Epoch  230  loss  0.8190219831228698 correct 50
 Epoch  240  loss  0.6978672369666373 correct 49
 command took 0:12:40.90 (760.90s total)
+```
+Xor Dataset: <br>
+python project\run_fast_tensor.py --BACKEND gpu --HIDDEN 100 --DATASET xor --RATE 0.03 <br>
+Seconds per epoch: 2.95204
+```
+Epoch  0  loss  6.672543103171848 correct 37
+Epoch  10  loss  4.114120807097733 correct 34
+Epoch  20  loss  5.224725963458059 correct 38
+Epoch  30  loss  3.8929358200152295 correct 42
+Epoch  40  loss  5.8829773172654285 correct 41
+Epoch  50  loss  4.3350751115082975 correct 42
+Epoch  60  loss  3.457718537500069 correct 41
+Epoch  70  loss  3.235999824937285 correct 39
+Epoch  80  loss  6.538711735119895 correct 45
+Epoch  90  loss  2.666461665569597 correct 46
+Epoch  100  loss  4.340809132494291 correct 42
+Epoch  110  loss  3.653752478400166 correct 47
+Epoch  120  loss  1.6450747141238498 correct 45
+Epoch  130  loss  1.818210109380465 correct 48
+Epoch  140  loss  5.0833867433092035 correct 41
+Epoch  150  loss  2.558618858761268 correct 44
+Epoch  160  loss  1.8222410483168858 correct 49
+Epoch  170  loss  3.0588401278147463 correct 47
+Epoch  180  loss  2.3898187546183483 correct 48
+Epoch  190  loss  1.7667747432540923 correct 46
+Epoch  200  loss  2.52062841044329 correct 42
+Epoch  210  loss  1.674854239387522 correct 45
+Epoch  220  loss  3.7304962689182672 correct 47
+Epoch  230  loss  1.9598601132723696 correct 45
+Epoch  240  loss  1.5917043155001505 correct 46
+command took 0:12:18.01 (738.01s total)
 ```
 
 ### Graph
