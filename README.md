@@ -342,28 +342,6 @@ def _tensor_matrix_multiply(                                                    
             temp += a_storage[a_flat_idx] * b_storage[b_flat_idx]                          |
         out[flat_out_idx] = temp                                                           |
                                                                                            |
-    #### OLD version using buffers ########                                                |
-    # for flat_out_idx in prange(len(out)):                                                |
-    #     out_index = np.empty(MAX_DIMS, np.int32)                                         |
-    #     a_index = np.empty(MAX_DIMS, np.int32)                                           |
-    #     b_index = np.empty(MAX_DIMS, np.int32)                                           |
-                                                                                           |
-    #     to_index(flat_out_idx, out_shape, out_index)                                     |
-    #     row, col = out_index[len(a_shape) - 2], out_index[len(a_shape) - 1]              |
-    #     out_index[len(a_shape) - 2 :] = 0                                                |
-    #     broadcast_index(out_index, out_shape, a_shape, a_index)                          |
-    #     broadcast_index(out_index, out_shape, b_shape, b_index)                          |
-                                                                                           |
-    #     temp = 0                                                                         |
-    #     for i in prange(a_shape[-1]):                                                    |
-    #         a_flat_idx = (                                                               |
-    #             a_batch_stride * a_index[0] + a_strides[-2] * row + a_strides[-1] * i    |
-    #         )                                                                            |
-    #         b_flat_idx = (                                                               |
-    #             b_batch_stride * b_index[0] + b_strides[-2] * i + b_strides[-1] * col    |
-    #         )                                                                            |
-    #         temp += a_storage[a_flat_idx] * b_storage[b_flat_idx]                        |
-    #     out[flat_out_idx] = temp                                                         |
 --------------------------------- Fusing loops ---------------------------------
 Attempting fusion of parallel loops (combines loops with similar properties)...
 Following the attempted fusion of parallel for-loops there are 2 parallel for-
@@ -401,16 +379,18 @@ No allocation hoisting found
 
 ## Task 3.5
 ### CPU:
-Simple Dataset: <br>
+#### Simple Dataset: 
 ![image](https://github.com/user-attachments/assets/286f4cec-b6d3-4933-866b-bb18bf9f87b6) <br>
-Xor Dataset: <br>
+#### Xor Dataset:
 ![image](https://github.com/user-attachments/assets/b88daf22-6151-460c-b388-517ffa97a8ba) <br>
-Split Dataset: <br>
+#### Split Dataset:
 ![image](https://github.com/user-attachments/assets/467cf62e-14ab-4149-8aac-a1e79dff2e8b) <br>
 
 ### GPU (Run on my laptop):
-Simple Dataset: <br>
+#### Simple Dataset:
+```
 python project\run_fast_tensor.py --BACKEND gpu --HIDDEN 100 --RATE 0.05 <br>
+```
 Seconds per epoch: 2.74788
 ```
 Epoch  0  loss  6.968308463229703 correct 29
@@ -440,8 +420,10 @@ Epoch  230  loss  0.06911283649637871 correct 49
 Epoch  240  loss  1.4884305587203188 correct 49
 command took 0:11:26.97 (686.97s total)
 ```
-Split Dataset: <br>
+#### Split Dataset:
+```
 project\run_fast_tensor.py --BACKEND gpu --HIDDEN 100 --DATASET split --RATE 0.05 <br>
+```
 Seconds per Epoch: 3.0436
 ```
 Epoch  0  loss  5.9280363848075375 correct 31
@@ -471,8 +453,10 @@ Epoch  230  loss  0.8190219831228698 correct 50
 Epoch  240  loss  0.6978672369666373 correct 49
 command took 0:12:40.90 (760.90s total)
 ```
-Xor Dataset: <br>
+#### Xor Dataset:
+```
 python project\run_fast_tensor.py --BACKEND gpu --HIDDEN 100 --DATASET xor --RATE 0.03 <br>
+```
 Seconds per epoch: 2.94324
 ```
 Epoch  0  loss  8.114063354672046 correct 29
