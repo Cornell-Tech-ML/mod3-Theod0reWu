@@ -403,3 +403,7 @@ Xor Dataset: <br>
 ![image](https://github.com/user-attachments/assets/b88daf22-6151-460c-b388-517ffa97a8ba) <br>
 Split Dataset: <br>
 ![image](https://github.com/user-attachments/assets/467cf62e-14ab-4149-8aac-a1e79dff2e8b) <br>
+
+### Graph
+![image](https://github.com/user-attachments/assets/170e205d-9ee1-4b77-ac09-068231fcb66f)
+
