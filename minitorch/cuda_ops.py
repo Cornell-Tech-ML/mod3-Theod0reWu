@@ -496,7 +496,7 @@ def _tensor_matrix_multiply(
             b_shared[pi, pj] = 0.0
         cuda.syncthreads()
 
-        # Apply the dot product between on data loaded in
+        # Apply the dot product on the data loaded in
         for k in range(BLOCK_DIM):
             temp_out += a_shared[pi, k] * b_shared[k, pj]
         cuda.syncthreads()

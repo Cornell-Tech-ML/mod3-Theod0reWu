@@ -379,7 +379,7 @@ No allocation hoisting found
 
 ## Task 3.5
 ### CPU:
-#### Simple Dataset: 
+#### Simple Dataset:
 ![image](https://github.com/user-attachments/assets/286f4cec-b6d3-4933-866b-bb18bf9f87b6) <br>
 #### Xor Dataset:
 ![image](https://github.com/user-attachments/assets/b88daf22-6151-460c-b388-517ffa97a8ba) <br>
@@ -486,7 +486,77 @@ Epoch  230  loss  0.7361953318599451 correct 47
 Epoch  240  loss  1.3558784760866087 correct 50
 command took 0:12:15.81 (735.81s total)
 ```
-### BIG model
+### BIG model (Run on my laptop)
+#### GPU
+```
+python project\run_fast_tensor.py --BACKEND gpu --HIDDEN 200 --DATASET circle --RATE 0.05
+```
+Hidden: 200 <br>
+Seconds per epoch: 2.7508 <br>
+```
+Epoch  0  loss  33.744409391126254 correct 20
+Epoch  10  loss  6.444741235629859 correct 32
+Epoch  20  loss  4.176365627082032 correct 46
+Epoch  30  loss  3.9898180040661453 correct 43
+Epoch  40  loss  1.9732378557625352 correct 43
+Epoch  50  loss  2.9122716107611044 correct 44
+Epoch  60  loss  3.148896383102531 correct 42
+Epoch  70  loss  2.9804827793566484 correct 48
+Epoch  80  loss  2.779114538541172 correct 48
+Epoch  90  loss  3.1687607221656187 correct 47
+Epoch  100  loss  2.7628788351692966 correct 46
+Epoch  110  loss  2.1288466234378216 correct 48
+Epoch  120  loss  1.634866827150252 correct 50
+Epoch  130  loss  0.9897195050066349 correct 48
+Epoch  140  loss  1.6174067367999247 correct 49
+Epoch  150  loss  0.8321457872915223 correct 50
+Epoch  160  loss  1.2792221146603917 correct 49
+Epoch  170  loss  0.861908647060686 correct 49
+Epoch  180  loss  3.785187225580393 correct 42
+Epoch  190  loss  1.0717984887597476 correct 48
+Epoch  200  loss  1.2673941019168262 correct 49
+Epoch  210  loss  1.0316393519055875 correct 49
+Epoch  220  loss  1.4867969911616665 correct 50
+Epoch  230  loss  0.4694836919878009 correct 49
+Epoch  240  loss  0.3361890195169463 correct 50
+command took 0:11:27.70 (687.70s total)
+```
+
+#### CPU
+```
+python project\run_fast_tensor.py --BACKEND cpu --HIDDEN 200 --DATASET circle --RATE 0.05
+```
+Hidden: 200 <br>
+Seconds per epoch: 0.34632 <br>
+```
+Epoch  0  loss  4.603893992043088 correct 35
+Epoch  10  loss  4.829009534264118 correct 39
+Epoch  20  loss  5.745500038805549 correct 35
+Epoch  30  loss  2.577085196159674 correct 44
+Epoch  40  loss  4.6311813672864215 correct 47
+Epoch  50  loss  1.9792432849638384 correct 47
+Epoch  60  loss  1.2218510214564804 correct 48
+Epoch  70  loss  2.5945908580272445 correct 48
+Epoch  80  loss  2.1058738128469745 correct 50
+Epoch  90  loss  1.3092505818827136 correct 50
+Epoch  100  loss  1.9514920354894143 correct 46
+Epoch  110  loss  2.0154860394799767 correct 46
+Epoch  120  loss  2.04556679189958 correct 48
+Epoch  130  loss  1.3472074994966818 correct 49
+Epoch  140  loss  1.119256219058358 correct 49
+Epoch  150  loss  2.000530604852849 correct 46
+Epoch  160  loss  0.583488793174523 correct 49
+Epoch  170  loss  0.630803838855586 correct 49
+Epoch  180  loss  0.29966527718548996 correct 50
+Epoch  190  loss  1.7276795985784037 correct 49
+Epoch  200  loss  0.8551741398146399 correct 49
+Epoch  210  loss  0.9343219179592116 correct 49
+Epoch  220  loss  0.3998231062630005 correct 49
+Epoch  230  loss  1.5711446217420524 correct 49
+Epoch  240  loss  1.606402966561453 correct 49
+command took 0:1:26.58 (86.58s total)
+```
+
 
 ### Graph for matrix multiply
 ![image](https://github.com/user-attachments/assets/170e205d-9ee1-4b77-ac09-068231fcb66f)
