@@ -471,25 +471,35 @@ def _tensor_matrix_multiply(
     #    b) Copy into shared memory for b matrix
     #    c) Compute the dot produce for position c[i, j]
 
-    # get the correct index of the batch dimensions in a and b
+    # Get the ordinal index associated with this thread
     out_flat_idx = out_strides[0] * batch + out_strides[-2] * i + out_strides[-1] * j
+
+    # (Manual broadcasting for the batch dimension)
+    # get the correct index of the batch dimensions in a and b, which is the minimum of the out batch index and the max batch index for a and b
     a_batch = min(a_shape[0] - 1, batch)
     b_batch = min(b_shape[0] - 1, batch)
 
     # accumulate the answer in each thread for c[i,j] in temp_out
     temp_out = 0
+
+    # Loop over the number of sections needed to fully compute the dot products
     for section in range((a_shape[-1] - 1) // BLOCK_DIM + 1):
-        # Get the ordinal indicies for the a and b tensor
+        # The column for a and the row for b are based on the section
         a_j = section * BLOCK_DIM + pj
         b_i = section * BLOCK_DIM + pi
+
+        # Get the ordinal indicies for the a and b tensor,
         a_flat_idx = a_batch_stride * a_batch + a_strides[-2] * i + a_strides[-1] * a_j
         b_flat_idx = b_batch_stride * b_batch + b_strides[-2] * b_i + b_strides[-1] * j
 
-        # Load the necessary data in from the a and b tensors
+        # The data is loaded in in chunks for BLOCK_DIM along the columns for a and rows for b
+        # The default value if there is an overflow is 0, as we can add 0 to the dot product without any consequences
+        # Load the data in from the a tensor
         if i < a_shape[-2] and a_j < a_shape[-1]:
             a_shared[pi, pj] = a_storage[a_flat_idx]
         else:
             a_shared[pi, pj] = 0.0
+        # Similarly load the data in from the b tensor
         if j < b_shape[-1] and b_i < b_shape[-2]:
             b_shared[pi, pj] = b_storage[b_flat_idx]
         else:
